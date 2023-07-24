@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>내부 서버 오류</title>
+  <link rel="stylesheet" th:href="@{css/style.css}">
+</head>
+<body>
+<div class="wrap">
+  <th:block th:insert="~{header.html}"></th:block>
+    <div class="write-form">
+      <h2>서버에 문제가 있습니다.</h2>
+      <p th:text="${'경로 : ' + path}"></p>
+      <p th:text="${'상태 : ' + status}"></p>
+      <p th:text="${'발생 시간 : ' + timestamp}"></p>
+      <p th:text="${'오류 : ' + error}"></p>
+      <p th:text="${'예외사항 : ' + exception}"></p>
+      <p th:text="${'메시지 : ' + message }"></p>
+<!--      <p th:text="${'trace : ' + trace}"></p>-->
+    </div>
+  <th:block th:insert="~{footer.html}"></th:block>
+</div>
+</body>
+</html>

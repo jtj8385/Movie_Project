@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie - Write</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+    $(function (){
+      let m = [[${msg}]]; //msg가 없으면 null
+      if (m != null){
+        alert(m);
+      }
+
+      //파일 업로드 시 선택한 파일명 출력
+      $("#file").on("change",function (){
+          let files = $("#file")[0].files; //file안의 요소를 가져옴
+
+          let fileName = "";
+
+          if (files.length == 1){ //파일크기가 1이면
+              fileName = files[0].name; //첫번째 파일의 이름을 가져옴
+          }
+          else {//파일 선택창에서 '취소' 버튼 클릭
+              fileName = "파일선택";
+          }
+          $(".upload-name").val(fileName); //클래스 안의 value속성을 fileName으로 설정
+      });
+
+      $("#backbtn").on("click", function (){
+          let pn = [[${session.pageNum}]]; //session객체에서 페이지 번호 속성 pn 선언
+          if (pn ==null){ //페이지 번호가 null 이라면
+            pn = 1; //페이지 번호는 1
+          }
+          location.href = "/?pageNum=" + pn; //해당 url페이지로 이동
+      });
+    });
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <th:block th:insert="~{header.html}"></th:block>
+    <div class="content">
+        <form th:action="@{writeProc}" method="post" class="write-form" enctype="multipart/form-data">
+            <h2>영화 등록</h2>
+            <div class="filebox">
+                <label for="file">포스터</label>
+              <input type="file" name="files" id="file">
+              <input type="text" class="upload-name" value="파일선택" readonly>
+            </div>
+            <input type="text" class="write-input" name="mname" autofocus placeholder="제목" required>
+            <input type="text" class="write-input" name="mdirector" placeholder="감독" required>
+            <input type="text" class="write-input" name="mnation" placeholder="국가" required>
+            <input type="text" class="write-input" name="mgenre" placeholder="장르" required>
+            <input type="text" class="write-input" name="mactor" placeholder="주연배우" required>
+            <input type="date" class="write-input" name="mopen" placeholder="개봉일" required>
+            <textarea rows="5" class="write-input ta" name="msynopsis" placeholder="영화 개요"></textarea>
+            <div class="btn-area">
+                <input type="submit" class="btn-write" value="W">
+                <input type="reset" class="btn-write" value="R">
+                <input type="button" class="btn-write" value="B" id="backbtn">
+            </div>
+        </form>
+    </div>
+    <th:block th:insert="~{footer.html}"></th:block>
+</div>
+</body>
+</html>

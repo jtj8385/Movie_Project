@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Moview Info</title>
+  <link rel="stylesheet" th:href="@{css/style.css}">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script th:inline="javascript">
+    $(function (){ // 서버로부터 전달받은 msg 변수를 경고창으로 출력
+      let m = [[${msg}]]; //msg가 없으면 null
+      if (m != null){
+        alert(m);
+      }
+    });
+  </script>
+</head>
+<body>
+<div class="wrap">
+    <th:block th:insert="~{header.html}"></th:block>
+    <div class="content">
+        <div class="board-form">
+            <div class="list-title">
+                <h2 class="form-header">영화 목록</h2>
+                <button class="wr-btn" th:onclick="|location.href='@{writeForm}'|">
+                    영화등록
+                </button>
+            </div>
+            <div class="data-area">
+                <th:block th:if="${#lists.isEmpty(mList)}">
+                    <div class="movie-item" style="height: 100px;">
+                        등록된 영화가 없습니다.
+                    </div>
+                </th:block>
+                <th:block th:unless="${#lists.isEmpty(mList)}">
+                    <th:block th:each="mitem:${mList}">
+                        <div class="movie-item">
+                            <th:block th:if="${mitem.msysname} == null">
+                                <img class="poster-pre" th:src="@{images/no_image.jpg}">
+                            </th:block>
+                            <th:block th:unless="${mitem.msysname} == null">
+                                <img class="poster-pre" th:src="@{upload/}+${mitem.msysname}">
+                            </th:block>
+                            <div class="info-pre">
+                                <div class="title-pre">
+                                    <a th:href="@{detail(mcode=${mitem.mcode})}" th:text="${mitem.mname}"></a>
+                                </div>
+                                <div th:text="${mitem.mdirector}"></div>
+                                <div th:text="${mitem.mopen}"></div>
+                            </div>
+                        </div>
+                    </th:block>
+                </th:block>
+            </div>
+            <div class="paging-area">
+                <div class="paging" th:utext="${paging}"></div>
+            </div>
+        </div>
+    </div>
+    <th:block th:insert="~{footer.html}"></th:block>
+</div>
+</body>
+</html>

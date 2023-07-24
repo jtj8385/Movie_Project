@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        $(function (){
+            let m = [[${msg}]]; //msg가 없으면 null
+            if (m != null){
+                alert(m);
+            }
+        });
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <th:block th:insert="~{header.html}"></th:block>
+    <div class="content">
+        <div class="detail-form">
+            <h2 class="form-header">상세 보기</h2>
+            <div class="detail">
+                <div class="detail-sub">
+                    <div class="detail-title">포스터</div>
+                    <div class="detail-content">
+                        <th:block th:if="${movie.msysname} == null">
+                            <img class="poster" th:src="@{images/no_images.jpg}">
+                        </th:block>
+                        <th:block th:unless="${movie.msysname} == null">
+                            <img class="poster" th:src="@{upload/}+${movie.msysname}">
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <div class="detail">
+                <div class="detail-sub">
+                    <div class="detail-title">제목</div>
+                    <div class="detail-content" th:text="${movie.mname}"></div>
+                </div>
+                <div class="detail-sub">
+                    <div class="detail-title">감독</div>
+                    <div class="detail-content" th:text="${movie.mdirector}"></div>
+                </div>
+                <div class="detail-sub">
+                    <div class="detail-title">장르</div>
+                    <div class="detail-content" th:text="${movie.mgenre}"></div>
+                </div>
+                <div class="detail-sub">
+                    <div class="detail-title">국가</div>
+                    <div class="detail-content" th:text="${movie.mnation}"></div>
+                </div>
+                <div class="detail-sub">
+                    <div class="detail-title">주연배우</div>
+                    <div class="detail-content" th:text="${movie.mactor}"></div>
+                </div>
+                <div class="detail-sub">
+                    <div class="detail-title">개봉일</div>
+                    <div class="detail-content" th:text="${movie.mopen}"></div>
+                </div>
+                <div class="detail">
+                    <div class="detail-sub">
+                        <div class="synopsis-title">영화개요</div>
+                        <div class="synopsis-content" th:text="${movie.msynopsis}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-area">
+                <button class="btn-write" id="upbtn">U</button>
+                <button class="btn-write" id="delbtn">D</button>
+                <button class="btn-sub" id="backbtn">B</button>
+            </div>
+        </div>
+    </div>
+    <th:block th:insert="~{footer.html}"></th:block>
+</div>
+</body>
+<script th:inline="javascript">
+    $("#backbtn").click(function (){
+       let pn = [[${session.pageNum}]];
+       if (pn == null){
+           pn = 1;
+       }
+       location.href = "/?pageNum=" + pn;
+    });
+
+    $("#upbtn").click(function (){
+        location.href = "updateForm?mcode=" + [[${movie.mcode}]];
+    });
+
+    $("#delbtn").click(function (){
+       let conf = confirm("삭제하시겠습니까?");
+       if (conf == true){
+           location.href = "delete?mcode=" + [[${movie.mcode}]]
+                            + "&msysname=" + [[${movie.msysname}]];
+       }
+    });
+</script>
+</html>
